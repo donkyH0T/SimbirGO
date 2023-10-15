@@ -22,7 +22,7 @@ public class TransportService {
     @Autowired
     UserRepository userRepository;
 
-    public ResponseEntity<?> addTransport(Long id){
+    public ResponseEntity<?> getTransportById(Long id){
         if(!transportRepository.existsById(id)){
             return ResponseEntity.badRequest().body("Error: Transportation does not exist");
         }
@@ -39,7 +39,7 @@ public class TransportService {
     public ResponseEntity<?> addTransport(TransportDto transportDto){
         User user=getUser();
         Transport transport=new Transport();
-        BeanUtils.copyProperties(transport,transportDto);
+        BeanUtils.copyProperties(transportDto,transport);
         try{
             transportRepository.save(transport);
             List<Transport> transportList=user.getTransport();

@@ -19,6 +19,6 @@ public class TransportDto {
     private String description;
     private Double latitude;
     private Double longitude;
-    private double minutePrice;
-    private double dayPrice;
+    private Double minutePrice;
+    private Double dayPrice;
 }

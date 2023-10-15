@@ -1,6 +1,7 @@
 package com.example.simbirgo.repository;
 
 
+import com.example.simbirgo.entity.Transport;
 import com.example.simbirgo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,8 +18,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Boolean existsByUsername(String username);
 
-	@Query(value = "SELECT * FROM service LIMIT :start, :count", nativeQuery = true)
+	@Query(value = "SELECT * FROM users LIMIT :start, :count", nativeQuery = true)
 	List<User> findAllUsers(@Param("start") int start, @Param("count") int count);
+
 
 
 }

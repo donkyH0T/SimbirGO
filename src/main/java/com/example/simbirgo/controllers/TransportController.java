@@ -27,9 +27,9 @@ public class TransportController {
    @Autowired
     TransportService transportService;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> addTransport(@PathVariable Long id){
-        return transportService.addTransport(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTransportById(@PathVariable Long id){
+        return transportService.getTransportById(id);
     }
 
     @PostMapping
