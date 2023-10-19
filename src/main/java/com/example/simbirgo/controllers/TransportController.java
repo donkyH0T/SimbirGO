@@ -7,6 +7,7 @@ import com.example.simbirgo.payload.request.TransportDto;
 import com.example.simbirgo.repository.TransportRepository;
 import com.example.simbirgo.repository.UserRepository;
 import com.example.simbirgo.security.services.TransportService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,22 +29,26 @@ public class TransportController {
     TransportService transportService;
 
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "JWT")
     public ResponseEntity<?> getTransportById(@PathVariable Long id){
         return transportService.getTransportById(id);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @SecurityRequirement(name = "JWT")
     public ResponseEntity<?> addTransport(@RequestBody TransportDto transportDto){
         return transportService.addTransport(transportDto);
     }
 
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "JWT")
     public ResponseEntity<?> putTransport(@PathVariable Long id,@RequestBody TransportDto transportDto){
         return transportService.putTransport(id, transportDto);
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "JWT")
     public ResponseEntity<?> deleteTransport(@PathVariable Long id){
        return transportService.deleteTransport(id);
     }

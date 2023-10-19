@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -87,8 +89,8 @@ public class AccountService {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    public ResponseEntity<?> signOut(){
-        SecurityContextHolder.clearContext();
+    public ResponseEntity<?> signOut(HttpServletResponse response){
+        response.setHeader("Authorization",null);
         return ResponseEntity.ok(new MessageResponse("User signed out successfully!"));
     }
 

@@ -1,6 +1,7 @@
 package com.example.simbirgo.controllers;
 
 import com.example.simbirgo.security.services.PaymentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ public class PaymentController {
     PaymentService paymentService;
 
     @PostMapping("/{accountId}")
+    @SecurityRequirement(name = "JWT")
     public ResponseEntity<?> addmoney(@PathVariable Long accountId){
         return paymentService.getMoney(accountId);
     }
