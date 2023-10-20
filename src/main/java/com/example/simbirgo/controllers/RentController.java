@@ -5,6 +5,7 @@ import com.example.simbirgo.security.services.RentService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -28,6 +29,7 @@ public class RentController {
 
     @GetMapping("/MyHistory")
     @SecurityRequirement(name = "JWT")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> getRentHistoryForCurrentUser() {
         return rentService.getRentHistoryForCurrentUser();
     }
@@ -40,6 +42,7 @@ public class RentController {
 
     @PostMapping("/New/{transportId}")
     @SecurityRequirement(name = "JWT")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> rentTransport(@PathVariable Long transportId, @RequestParam String rentType) {
         return rentService.rentTransport(transportId,rentType);
     }

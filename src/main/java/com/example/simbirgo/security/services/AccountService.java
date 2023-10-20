@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,12 +86,16 @@ public class AccountService {
         Set<Role> roles=new HashSet<>();
         roles.add(roleRepository.findByName(ERole.ROLE_USER).get());
         user.setRoles(roles);
+        user.setBalance(0.0);
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    public ResponseEntity<?> signOut(HttpServletResponse response){
-        response.setHeader("Authorization",null);
+    public ResponseEntity<?> signOut(HttpServletRequest request, HttpServletResponse response){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
         return ResponseEntity.ok(new MessageResponse("User signed out successfully!"));
     }
 
@@ -98,6 +103,9 @@ public class AccountService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
         User user = userRepository.findByUsername(currentUserName).get();
+        if(userRepository.existsByUsername(updateRequest.getUsername())){
+            return ResponseEntity.badRequest().build();
+        }
         user.setUsername(updateRequest.getUsername());
         user.setPassword(encoder.encode(updateRequest.getPassword()));
         userRepository.save(user);

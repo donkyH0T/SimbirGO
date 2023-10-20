@@ -71,12 +71,13 @@ public class TransportService {
     public ResponseEntity<?> deleteTransport(Long id){
         User user=getUser();
         List<Transport> transportList=user.getTransport();
-        if(transportList.stream().filter(transport -> transport.getId()==id).findFirst().orElse(null)!=null){
+        if(transportList.stream().filter(transport -> transport.getId().equals(id)).findFirst().orElse(null)!=null){
             Transport transport=transportRepository.findById(id).get();
             transportList.remove(transport);
             user.setTransport(transportList);
             userRepository.save(user);
             transportRepository.delete(transport);
+            return ResponseEntity.ok("Vehicle deleted!");
         }
         return ResponseEntity.badRequest().body("Error: You are not the owner of the vehicle");
     }

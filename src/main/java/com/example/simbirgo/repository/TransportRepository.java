@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @Repository
 public interface TransportRepository extends JpaRepository<Transport,Long> {
-    @Query(value = "SELECT t FROM transports t " + "WHERE t.transport_type = :transportType " + "AND SQRT(POW(t.latitude - :centerLat, 2) + POW(t.longitude - :centerLon, 2)) <= :radius",nativeQuery = true)
+    @Query(value = "SELECT * FROM transports t " + "WHERE t.transport_type = :transportType " + "AND SQRT(POW(t.latitude - :centerLat, 2) + POW(t.longitude - :centerLon, 2)) <= :radius",nativeQuery = true)
     List<Transport> findTransportByTypeAndWithinRadius(@Param("transportType") String transportType,@Param("centerLat") double centerLat, @Param("centerLon") double centerLon, @Param("radius") double radius);
 
-    @Query(value = "SELECT t FROM transports t WHERE t.transport_type = :transportType LIMIT :start, :count",nativeQuery = true)
+    @Query(value = "SELECT * FROM transports t WHERE t.transport_type = :transportType LIMIT :count OFFSET :start", nativeQuery = true)
     List<Transport> findTransports(@Param("transportType") String transportType, @Param("start") int start, @Param("count") int count);
 
 

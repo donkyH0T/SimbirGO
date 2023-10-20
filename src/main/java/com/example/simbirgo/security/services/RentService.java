@@ -89,8 +89,8 @@ public class RentService {
                 String formattedDateTime = currentDateTime.format(formatter);
                 rent.setTimeStart(formattedDateTime);
                 rent.setPriceType(rentType);
-                rentRepository.save(rent);
-                return ResponseEntity.ok(rentRepository.save(rent));
+                rent.setPriceOfUnit(100.0);
+                return ResponseEntity.ok(rentRepository.saveAndFlush(rent));
             }
         }
         return ResponseEntity.notFound().build();

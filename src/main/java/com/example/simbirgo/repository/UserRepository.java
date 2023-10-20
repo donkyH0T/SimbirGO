@@ -18,9 +18,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Boolean existsByUsername(String username);
 
-	@Query(value = "SELECT * FROM users LIMIT :start, :count", nativeQuery = true)
-	List<User> findAllUsers(@Param("start") int start, @Param("count") int count);
 
+	@Query(value = "SELECT * FROM users LIMIT :count OFFSET :start", nativeQuery = true)
+	List<User> findAllUsers(@Param("start") int start, @Param("count") int count);
 
 
 }

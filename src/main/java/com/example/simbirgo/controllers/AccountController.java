@@ -36,7 +36,6 @@ public class AccountController {
     }
 
     @PostMapping("/SignIn")
-    @ApiOperation("Get something")
     public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest){
         return accountService.signIn(loginRequest);
     }
@@ -49,9 +48,8 @@ public class AccountController {
     @PostMapping("/SignOut")
     @SecurityRequirement(name = "JWT")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<?> signOut(HttpServletResponse response,HttpServletRequest request){
-        System.out.println(request.getHeader("Authorization"));
-        return accountService.signOut(response);
+    public ResponseEntity<?> signOut(HttpServletRequest request, HttpServletResponse response){
+        return accountService.signOut(request,response);
     }
 
     @PutMapping("/Update")

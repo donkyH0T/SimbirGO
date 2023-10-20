@@ -17,14 +17,14 @@ import java.util.List;
 public class AdminTransportController {
 
     @Autowired
-    private AdminTransportService transportService;
+    private AdminTransportService adminTransportService;
 
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "JWT")
     public List<Transport> getAllTransports(@RequestParam int start, @RequestParam int count, @RequestParam(required = false) String transportType) {
-        List<Transport> transports = transportService.getAllTransports(start, count, transportType);
+        List<Transport> transports = adminTransportService.getAllTransports(start, count, transportType);
         return transports;
     }
 
@@ -32,27 +32,27 @@ public class AdminTransportController {
     @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "JWT")
     public ResponseEntity<?> getTransportById(@PathVariable long id) {
-        return transportService.getTransportById(id);
+        return adminTransportService.getTransportById(id);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "JWT")
-    public Transport createTransport(@RequestBody TransportDto transportDto) {
-        return transportService.createTransport(transportDto);
+    public ResponseEntity<?> createTransport(@RequestBody TransportDto transportDto) {
+        return adminTransportService.createTransport(transportDto);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "JWT")
     public ResponseEntity<?> updateTransport(@PathVariable long id, @RequestBody TransportDto transportDto) {
-        return transportService.updateTransport(id, transportDto);
+        return adminTransportService.updateTransport(id, transportDto);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @SecurityRequirement(name = "JWT")
-    private ResponseEntity<?> deleteTransport(@PathVariable Long id){
-        return transportService.deleteTransport(id);
+    private ResponseEntity<?> deleteTransport(@PathVariable long id){
+        return adminTransportService.deleteTransport(id);
     }
 }

@@ -1,10 +1,14 @@
 package com.example.simbirgo.security.services;
 
 import com.example.simbirgo.entity.Transport;
+import com.example.simbirgo.entity.User;
 import com.example.simbirgo.payload.request.TransportDto;
 import com.example.simbirgo.repository.TransportRepository;
+import com.example.simbirgo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +17,8 @@ import java.util.List;
 public class AdminTransportService {
     @Autowired
     TransportRepository transportRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public List<Transport> getAllTransports(int start, int count, String transportType) {
         return transportRepository.findTransports(transportType,start,count);
@@ -24,8 +30,14 @@ public class AdminTransportService {
         }
         return ResponseEntity.badRequest().build();
     }
+    public User getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        User user=userRepository.findByUsername(currentUserName).get();
+        return user;
+    }
 
-    public Transport createTransport(TransportDto transportDto) {
+    public ResponseEntity<?> createTransport(TransportDto transportDto) {
         Transport transport=new Transport();
         transport.setCanBeRented(transportDto.getCanBeRented());
         transport.setTransportType(transportDto.getTransportType());
@@ -37,7 +49,13 @@ public class AdminTransportService {
         transport.setLongitude(transportDto.getLongitude());
         transport.setMinutePrice(transportDto.getMinutePrice());
         transport.setDayPrice(transportDto.getDayPrice());
-        return transportRepository.save(transport);
+        transportRepository.save(transport);
+        User user=getUser();
+        List<Transport> transportList=user.getTransport();
+        transportList.add(transport);
+        user.setTransport(transportList);
+        userRepository.save(user);
+        return ResponseEntity.ok("Transport save");
     }
 
     public ResponseEntity<?> updateTransport(long id, TransportDto transportDto) {
